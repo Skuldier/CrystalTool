@@ -1,0 +1,849 @@
+Starter Pokemon Memory Locations
+================================
+
+Scan Time: Frame 1080
+
+Address: 0xC097 (Lower WRAM)
+Values: 56, 64, 112
+
+Address: 0xC09E (Lower WRAM)
+Values: 16, 145, 194
+
+Address: 0xC09F (Lower WRAM)
+Values: 145, 194, 72
+
+Address: 0xC0A0 (Lower WRAM)
+Values: 194, 72, 64
+
+Address: 0xC0A1 (Lower WRAM)
+Values: 72, 64, 112
+
+Address: 0xC0A5 (Lower WRAM)
+Values: 79, 74, 79
+
+Address: 0xC0A6 (Lower WRAM)
+Values: 74, 79, 74
+
+Address: 0xC0A7 (Lower WRAM)
+Values: 79, 74, 178
+
+Address: 0xC0A8 (Lower WRAM)
+Values: 74, 178, 77
+
+Address: 0xC0A9 (Lower WRAM)
+Values: 178, 77, 79
+
+Address: 0xC0AA (Lower WRAM)
+Values: 77, 79, 74
+
+Address: 0xC0AB (Lower WRAM)
+Values: 79, 74, 178
+
+Address: 0xC0AC (Lower WRAM)
+Values: 74, 178, 77
+
+Address: 0xC0AD (Lower WRAM)
+Values: 178, 77, 79
+
+Address: 0xC0AE (Lower WRAM)
+Values: 77, 79, 74
+
+Address: 0xC0AF (Lower WRAM)
+Values: 79, 74, 79
+
+Address: 0xC0B0 (Lower WRAM)
+Values: 74, 79, 74
+
+Address: 0xC0B1 (Lower WRAM)
+Values: 79, 74, 178
+
+Address: 0xC0B2 (Lower WRAM)
+Values: 74, 178, 77
+
+Address: 0xC0B3 (Lower WRAM)
+Values: 178, 77, 171
+
+Address: 0xC0B4 (Lower WRAM)
+Values: 77, 171, 74
+
+Address: 0xC0B5 (Lower WRAM)
+Values: 171, 74, 213
+
+Address: 0xC0B6 (Lower WRAM)
+Values: 74, 213, 70
+
+Address: 0xC0B7 (Lower WRAM)
+Values: 213, 70, 110
+
+Address: 0xC0B8 (Lower WRAM)
+Values: 70, 110, 32
+
+Address: 0xC0B9 (Lower WRAM)
+Values: 110, 32, 110
+
+Address: 0xC0BA (Lower WRAM)
+Values: 32, 110, 32
+
+Address: 0xC0BB (Lower WRAM)
+Values: 110, 32, 160
+
+Address: 0xC0BC (Lower WRAM)
+Values: 32, 160, 249
+
+Address: 0xC0BD (Lower WRAM)
+Values: 160, 249, 156
+
+Address: 0xC0BE (Lower WRAM)
+Values: 249, 156, 2
+
+Address: 0xC0BF (Lower WRAM)
+Values: 156, 2, 25
+
+Address: 0xC0C0 (Lower WRAM)
+Values: 2, 25, 197
+
+Address: 0xC0CB (Lower WRAM)
+Values: 162, 88, 220
+
+Address: 0xC0CC (Lower WRAM)
+Values: 88, 220, 9
+
+Address: 0xC0CD (Lower WRAM)
+Values: 220, 9, 160
+
+Address: 0xC0D1 (Lower WRAM)
+Values: 186, 10, 105
+
+Address: 0xC0D2 (Lower WRAM)
+Values: 10, 105, 66
+
+Address: 0xC0D3 (Lower WRAM)
+Values: 105, 66, 79
+
+Address: 0xC0D4 (Lower WRAM)
+Values: 66, 79, 66
+
+Address: 0xC0D5 (Lower WRAM)
+Values: 79, 66, 31
+
+Address: 0xC0D6 (Lower WRAM)
+Values: 66, 31, 66
+
+Address: 0xC0D7 (Lower WRAM)
+Values: 31, 66, 182
+
+Address: 0xC0D8 (Lower WRAM)
+Values: 66, 182, 65
+
+Address: 0xC0D9 (Lower WRAM)
+Values: 182, 65, 80
+
+Address: 0xC0DA (Lower WRAM)
+Values: 65, 80, 1
+
+Address: 0xC0DB (Lower WRAM)
+Values: 80, 1, 48
+
+Address: 0xC0DC (Lower WRAM)
+Values: 1, 48, 45
+
+Address: 0xC0DD (Lower WRAM)
+Values: 48, 45, 128
+
+Address: 0xC0DE (Lower WRAM)
+Values: 45, 128, 18
+
+Address: 0xC0DF (Lower WRAM)
+Values: 128, 18, 178
+
+Address: 0xC0E0 (Lower WRAM)
+Values: 18, 178, 27
+
+Address: 0xC0E1 (Lower WRAM)
+Values: 178, 27, 130
+
+Address: 0xC0E2 (Lower WRAM)
+Values: 27, 130, 29
+
+Address: 0xC0E3 (Lower WRAM)
+Values: 130, 29, 99
+
+Address: 0xC0E4 (Lower WRAM)
+Values: 29, 99, 88
+
+Address: 0xC0E5 (Lower WRAM)
+Values: 99, 88, 48
+
+Address: 0xC0E6 (Lower WRAM)
+Values: 88, 48, 45
+
+Address: 0xC0E7 (Lower WRAM)
+Values: 48, 45, 192
+
+Address: 0xC0E8 (Lower WRAM)
+Values: 45, 192, 1
+
+Address: 0xC0EC (Lower WRAM)
+Values: 98, 241, 96
+
+Address: 0xC0ED (Lower WRAM)
+Values: 241, 96, 159
+
+Address: 0xC0EE (Lower WRAM)
+Values: 96, 159, 91
+
+Address: 0xC0EF (Lower WRAM)
+Values: 159, 91, 48
+
+Address: 0xC0F0 (Lower WRAM)
+Values: 91, 48, 45
+
+Address: 0xC0F1 (Lower WRAM)
+Values: 48, 45, 128
+
+Address: 0xC0F2 (Lower WRAM)
+Values: 45, 128, 18
+
+Address: 0xC0F3 (Lower WRAM)
+Values: 128, 18, 72
+
+Address: 0xC0F4 (Lower WRAM)
+Values: 18, 72, 95
+
+Address: 0xC0F5 (Lower WRAM)
+Values: 72, 95, 114
+
+Address: 0xC0F6 (Lower WRAM)
+Values: 95, 114, 93
+
+Address: 0xC0F7 (Lower WRAM)
+Values: 114, 93, 48
+
+Address: 0xC0F8 (Lower WRAM)
+Values: 93, 48, 45
+
+Address: 0xC0F9 (Lower WRAM)
+Values: 48, 45, 160
+
+Address: 0xC0FA (Lower WRAM)
+Values: 45, 160, 1
+
+Address: 0xC0FB (Lower WRAM)
+Values: 160, 1, 37
+
+Address: 0xC0FC (Lower WRAM)
+Values: 1, 37, 91
+
+Address: 0xC103 (Lower WRAM)
+Values: 59, 1, 17
+
+Address: 0xC10F (Lower WRAM)
+Values: 192, 183, 65
+
+Address: 0xC110 (Lower WRAM)
+Values: 183, 65, 6
+
+Address: 0xC111 (Lower WRAM)
+Values: 65, 6, 3
+
+Address: 0xC112 (Lower WRAM)
+Values: 6, 3, 5
+
+Address: 0xC11F (Lower WRAM)
+Values: 16, 16, 84
+
+Address: 0xC135 (Lower WRAM)
+Values: 59, 1, 1
+
+Address: 0xC141 (Lower WRAM)
+Values: 192, 199, 177
+
+Address: 0xC142 (Lower WRAM)
+Values: 199, 177, 6
+
+Address: 0xC143 (Lower WRAM)
+Values: 177, 6, 8
+
+Address: 0xC144 (Lower WRAM)
+Values: 6, 8, 5
+
+Address: 0xC150 (Lower WRAM)
+Values: 5, 18, 33
+
+Address: 0xC151 (Lower WRAM)
+Values: 18, 33, 98
+
+Address: 0xC174 (Lower WRAM)
+Values: 39, 99, 5
+
+Address: 0xC175 (Lower WRAM)
+Values: 99, 5, 8
+
+Address: 0xC176 (Lower WRAM)
+Values: 5, 8, 6
+
+Address: 0xC19D (Lower WRAM)
+Values: 223, 126, 168
+
+Address: 0xC19E (Lower WRAM)
+Values: 126, 168, 126
+
+Address: 0xC1D7 (Lower WRAM)
+Values: 128, 161, 208
+
+Address: 0xC1D8 (Lower WRAM)
+Values: 161, 208, 7
+
+Address: 0xC209 (Lower WRAM)
+Values: 128, 177, 225
+
+Address: 0xC20A (Lower WRAM)
+Values: 177, 225, 5
+
+Address: 0xC29F (Lower WRAM)
+Values: 60, 114, 79
+
+Address: 0xCDD9 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDA (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDB (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDC (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDD (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDE (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDDF (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDE0 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDE1 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDE2 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDE3 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDED (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDEE (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDEF (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF0 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF1 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF2 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF3 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF4 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF5 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF6 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCDF7 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE01 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE02 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE03 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE04 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE05 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE06 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE07 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE08 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE09 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE0A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE0B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE15 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE16 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE17 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE18 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE19 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1C (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1D (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1E (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE1F (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE29 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2C (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2D (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2E (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE2F (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE30 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE31 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE32 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE33 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE3D (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE3E (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE3F (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE40 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE41 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE42 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE43 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE44 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE45 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE46 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE47 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE51 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE52 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE53 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE54 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE55 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE56 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE57 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE58 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE59 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE5A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE5B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE65 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE66 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE67 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE68 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE69 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6C (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6D (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6E (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE6F (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE79 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7A (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7B (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7C (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7D (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7E (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE7F (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE80 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE81 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE82 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCE83 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEC9 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECA (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECB (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECC (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECD (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECE (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCECF (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED0 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED1 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED2 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED3 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED4 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED5 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED6 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED7 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED8 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCED9 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDA (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDB (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDC (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDD (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDE (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEDF (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE0 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE1 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE2 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE3 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE4 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE5 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE6 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE7 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE8 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEE9 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEEA (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEEB (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEEC (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEED (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEEE (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEEF (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF0 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF1 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF2 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF3 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF4 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF5 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF6 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF7 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF8 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEF9 (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEFA (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEFB (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEFC (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xCEFD (Mid WRAM 2)
+Values: 7, 7, 7
+
+Address: 0xD08A (Upper WRAM 1)
+Values: 130, 135, 145
+
+Address: 0xD08B (Upper WRAM 1)
+Values: 135, 145, 136
+
+Address: 0xD08C (Upper WRAM 1)
+Values: 145, 136, 146
+
+Address: 0xD08D (Upper WRAM 1)
+Values: 136, 146, 80
+
+Address: 0xD23A (Upper WRAM 1)
+Values: 39, 115, 45
+
+Address: 0xD23B (Upper WRAM 1)
+Values: 115, 45, 20
+
+Address: 0xD23C (Upper WRAM 1)
+Values: 45, 20, 20
+
+Address: 0xD23D (Upper WRAM 1)
+Values: 20, 20, 45
+
+Address: 0xD23E (Upper WRAM 1)
+Values: 20, 45, 25
+
+Address: 0xD247 (Upper WRAM 1)
+Values: 191, 100, 10
+
+Address: 0xD248 (Upper WRAM 1)
+Values: 100, 10, 5
+
+Address: 0xD249 (Upper WRAM 1)
+Values: 10, 5, 85
+
+Address: 0xD251 (Upper WRAM 1)
+Values: 102, 111, 55
+
+Address: 0xD252 (Upper WRAM 1)
+Values: 111, 55, 59
+
+Address: 0xD253 (Upper WRAM 1)
+Values: 55, 59, 245
+
+Address: 0xD254 (Upper WRAM 1)
+Values: 59, 245, 167
+
+Address: 0xD255 (Upper WRAM 1)
+Values: 245, 167, 159
+
+Address: 0xD256 (Upper WRAM 1)
+Values: 167, 159, 98
+
+Address: 0xD257 (Upper WRAM 1)
+Values: 159, 98, 14
+
+Address: 0xDC00 (Upper WRAM 3)
+Values: 129, 142, 151
+
+Address: 0xDC01 (Upper WRAM 3)
+Values: 142, 151, 247
+
+Address: 0xDC02 (Upper WRAM 3)
+Values: 151, 247, 249
+
+Address: 0xDC03 (Upper WRAM 3)
+Values: 247, 249, 80
+
+Address: 0xDC09 (Upper WRAM 3)
+Values: 129, 142, 151
+
+Address: 0xDC0A (Upper WRAM 3)
+Values: 142, 151, 247
+
+Address: 0xDC0B (Upper WRAM 3)
+Values: 151, 247, 250
+
+Address: 0xDC0C (Upper WRAM 3)
+Values: 247, 250, 80
+
+
+To use in starter_detector.lua, update:
+starter_data = {
+    slot1 = 0xC097,
+    slot2 = 0xC098,
+    slot3 = 0xC099,
+}
