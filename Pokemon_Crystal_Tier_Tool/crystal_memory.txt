@@ -1,0 +1,304 @@
+-- Pokemon Crystal US Version Memory Address Table
+-- Compatible with Archipelago Randomizer
+
+local crystal_memory = {
+    -- Party Pokemon System
+    party = {
+        count = 0xDCD7,                    -- Number of Pokemon in party (1-6)
+        species_list = 0xDCD8,             -- Species IDs (6 bytes + 0xFF terminator)
+        data_start = 0xDCDF,               -- First Pokemon data (48 bytes each)
+        
+        -- Offsets within each Pokemon's 48-byte structure
+        pokemon_offsets = {
+            species = 0x00,                -- Species ID
+            held_item = 0x01,              -- Held item ID
+            moves = {                      -- Move IDs
+                move1 = 0x02,
+                move2 = 0x03,
+                move3 = 0x04,
+                move4 = 0x05
+            },
+            trainer_id = 0x06,             -- 2 bytes
+            experience = 0x08,             -- 3 bytes, big-endian
+            hp_ev = 0x0B,                  -- HP EV (2 bytes)
+            attack_ev = 0x0D,              -- Attack EV (2 bytes)
+            defense_ev = 0x0F,             -- Defense EV (2 bytes)
+            speed_ev = 0x11,               -- Speed EV (2 bytes)
+            special_ev = 0x13,             -- Special EV (2 bytes)
+            dvs = 0x14,                    -- DVs/IVs (2 bytes)
+            pp = {                         -- PP for moves
+                move1_pp = 0x17,
+                move2_pp = 0x18,
+                move3_pp = 0x19,
+                move4_pp = 0x1A
+            },
+            happiness = 0x1B,              -- Friendship/Happiness
+            pokerus = 0x1C,                -- Pokerus status
+            caught_data = 0x1D,            -- 2 bytes (time, level, location)
+            level = 0x1F,                  -- Current level
+            status = 0x20,                 -- Status condition
+            unused = 0x21,                 -- Unused byte
+            current_hp = 0x22,             -- 2 bytes
+            max_hp = 0x24,                 -- 2 bytes
+            attack = 0x26,                 -- 2 bytes
+            defense = 0x28,                -- 2 bytes
+            speed = 0x2A,                  -- 2 bytes
+            special_attack = 0x2C,         -- 2 bytes
+            special_defense = 0x2E         -- 2 bytes
+        },
+        
+        -- Nickname and OT name storage
+        nicknames_start = 0xDE41,          -- 11 bytes per nickname
+        ot_names_start = 0xDDFF            -- 11 bytes per OT name
+    },
+    
+    -- Battle System
+    battle = {
+        -- Enemy Pokemon data
+        enemy = {
+            species = 0xD204,              -- Enemy species ID
+            moves = {
+                move1 = 0xD208,
+                move2 = 0xD209,
+                move3 = 0xD20A,
+                move4 = 0xD20B
+            },
+            dvs = 0xD20C,                  -- Enemy DVs (2 bytes)
+            pp = {
+                move1_pp = 0xD20E,
+                move2_pp = 0xD20F,
+                move3_pp = 0xD210,
+                move4_pp = 0xD211
+            },
+            level = 0xD213,
+            max_hp = 0xD216,               -- 2 bytes
+            attack = 0xD218,               -- 2 bytes
+            defense = 0xD21A,              -- 2 bytes
+            speed = 0xD21C,                -- 2 bytes
+            special_attack = 0xD21E,       -- 2 bytes
+            special_defense = 0xD220       -- 2 bytes
+        },
+        
+        -- Battle state
+        battle_type = 0xD22D,              -- Type of battle
+        turn_count = 0xCCD5,               -- Battle turn counter
+        player_substitute_hp = 0xCCD7,     -- Player's Substitute HP
+        enemy_substitute_hp = 0xCCD8,      -- Enemy's Substitute HP
+        
+        -- Battle move data
+        current_move = 0xCCDC,             -- Currently selected move
+        move_effect = 0xCFD3,              -- Move effect ID
+        move_type = 0xCFD5,                -- Move type
+        
+        -- Stat modifiers (7 = no change)
+        player_stat_mods = {
+            attack = 0xCD1A,
+            defense = 0xCD1B,
+            speed = 0xCD1C,
+            special_attack = 0xCD1D,
+            special_defense = 0xCD1E,
+            accuracy = 0xCD1F,
+            evasion = 0xCD20
+        },
+        enemy_stat_mods = {
+            attack = 0xCD2E,
+            defense = 0xCD2F,
+            speed = 0xCD30,
+            special_attack = 0xCD31,
+            special_defense = 0xCD32,
+            accuracy = 0xCD33,
+            evasion = 0xCD34
+        },
+        
+        -- Critical hit flags
+        player_crit_flag = 0xD05D,
+        enemy_crit_flag = 0xD05E
+    },
+    
+    -- PC Box System
+    pc_boxes = {
+        current_box = 0xD8BC,              -- Current box number
+        
+        -- Box data (for current box in SRAM)
+        box_count = 0xAD6C,                -- Number of Pokemon in box
+        box_species = 0xAD6D,              -- Species list (20 + terminator)
+        box_data_start = 0xAD82,           -- Pokemon data (32 bytes each)
+        
+        -- Box Pokemon structure offsets (32 bytes)
+        box_pokemon_offsets = {
+            species = 0x00,
+            held_item = 0x01,
+            moves = {
+                move1 = 0x02,
+                move2 = 0x03,
+                move3 = 0x04,
+                move4 = 0x05
+            },
+            trainer_id = 0x06,             -- 2 bytes
+            experience = 0x08,             -- 3 bytes
+            hp_ev = 0x0B,                  -- 2 bytes
+            attack_ev = 0x0D,              -- 2 bytes
+            defense_ev = 0x0F,             -- 2 bytes
+            speed_ev = 0x11,               -- 2 bytes
+            special_ev = 0x13,             -- 2 bytes
+            dvs = 0x14,                    -- 2 bytes
+            pp = {
+                move1_pp = 0x17,
+                move2_pp = 0x18,
+                move3_pp = 0x19,
+                move4_pp = 0x1A
+            },
+            happiness = 0x1B,
+            pokerus = 0x1C,
+            caught_data = 0x1D,            -- 2 bytes
+            level = 0x1F
+        }
+    },
+    
+    -- Player Data
+    player = {
+        id = 0xD47B,                       -- Trainer ID (2 bytes)
+        name = 0xD47D,                     -- Player name (11 bytes)
+        money = 0xD573,                    -- Money (3 bytes, BCD)
+        
+        -- Position
+        map_x = 0xD20D,                    -- X coordinate
+        map_y = 0xD20E,                    -- Y coordinate
+        
+        -- Map data
+        map_bank = 0xDA00,                 -- Map bank
+        map_number = 0xDA01,               -- Map number
+        
+        -- Badges
+        johto_badges = 0xD57C,             -- Johto badges (bitflags)
+        kanto_badges = 0xD57D              -- Kanto badges (bitflags)
+    },
+    
+    -- Pokedex
+    pokedex = {
+        caught_flags = 0xDE99,             -- Caught flags (32 bytes)
+        seen_flags = 0xDEB9,               -- Seen flags (32 bytes)
+        unown_forms = 0xDED9,              -- Unown forms data (26 bytes)
+        unown_unlock = 0xDEF3              -- Unown mode unlock flag
+    },
+    
+    -- Daycare
+    daycare = {
+        -- Pokemon 1
+        pokemon1 = {
+            occupied = 0xDEF5,             -- Occupied flag
+            data_start = 0xDEF6            -- Pokemon data
+        },
+        
+        -- Pokemon 2
+        pokemon2 = {
+            occupied = 0xDF2C,             -- Occupied flag
+            data_start = 0xDF2D            -- Pokemon data
+        },
+        
+        -- Breeding
+        steps_to_egg = 0xDF2D,             -- Steps until egg
+        compatibility = 0xDF2E,            -- Breeding compatibility
+        egg_data = 0xDF65                  -- Egg Pokemon data
+    },
+    
+    -- Wild Encounters
+    wild = {
+        species = 0xD0ED,                  -- Wild Pokemon species
+        level = 0xD0FC,                    -- Wild Pokemon level
+        encounter_flag = 0xD20B,           -- Random encounter enable
+        
+        -- Roaming Pokemon
+        roaming = {
+            raikou = {
+                hp = 0xDFCF,               -- Current HP
+                dvs = 0xDFD0,              -- DVs (2 bytes)
+                level = 0xDFD2,            -- Level
+                map_group = 0xDFD3,        -- Map group
+                map_number = 0xDFD4        -- Map number
+            },
+            entei = {
+                hp = 0xDFD6,
+                dvs = 0xDFD7,              -- 2 bytes
+                level = 0xDFD9,
+                map_group = 0xDFDA,
+                map_number = 0xDFDB
+            },
+            suicune = {
+                hp = 0xDFDD,
+                dvs = 0xDFDE,              -- 2 bytes
+                level = 0xDFE0,
+                map_group = 0xDFE1,
+                map_number = 0xDFE2
+            }
+        }
+    },
+    
+    -- Game Options
+    options = {
+        main_options = 0xD199,             -- Packed options byte
+        -- Bit 0-2: Text speed
+        -- Bit 4: Text delay
+        -- Bit 5: Stereo sound
+        -- Bit 6: Battle style
+        -- Bit 7: Battle animations
+        
+        -- Menu cursors
+        menu_cursors = {
+            main_menu = 0xCC26,
+            start_menu = 0xCC27,
+            pack_menu = 0xCC28,
+            pokemon_menu = 0xCC29,
+            battle_menu = 0xCC2A
+        },
+        
+        -- Time
+        play_time = {
+            frame = 0xD4C4,                -- Frame counter
+            seconds = 0xD4C5,
+            minutes = 0xD4C6,
+            hours = 0xD4C7                 -- 2 bytes
+        },
+        
+        -- Real-time clock
+        rtc_day = 0xD4B6                   -- 3 bytes
+    },
+    
+    -- Starter Pokemon
+    starters = {
+        -- These are temporary addresses during selection
+        -- The actual generation uses wild encounter system
+        selection_flag = 0xD9F8,           -- Starter chosen flag
+        elm_lab_map = 0x08,                -- Professor Elm's lab map ID
+        
+        -- Starter species IDs (not randomized)
+        cyndaquil = 155,
+        totodile = 158,
+        chikorita = 152
+    },
+    
+    -- Utility functions for address calculation
+    utils = {
+        -- Get party Pokemon address
+        get_party_pokemon_addr = function(slot)
+            return crystal_memory.party.data_start + (slot * 48)
+        end,
+        
+        -- Get box Pokemon address
+        get_box_pokemon_addr = function(slot)
+            return crystal_memory.pc_boxes.box_data_start + (slot * 32)
+        end,
+        
+        -- Get nickname address
+        get_nickname_addr = function(slot)
+            return crystal_memory.party.nicknames_start + (slot * 11)
+        end,
+        
+        -- Get OT name address
+        get_ot_name_addr = function(slot)
+            return crystal_memory.party.ot_names_start + (slot * 11)
+        end
+    }
+}
+
+return crystal_memory

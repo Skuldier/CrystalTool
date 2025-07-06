@@ -1,11 +1,11 @@
 -- Display Module for Pokemon Crystal Tier Tool
 -- Handles all GUI rendering and overlay display
+-- Updated to show Pokemon and move names from memory
 
 local display = {}
 
 -- Load configuration
 local config = require("config")
-local pokemon_base_stats = require("data.pokemon_base_stats")
 
 -- Display configuration
 local display_config = {
@@ -57,6 +57,16 @@ local type_colors = {
     Ice = 0x98D8D8FF,
     Dragon = 0x7038F8FF,
     Dark = 0x705848FF
+}
+
+-- Status condition names
+local status_names = {
+    [0x00] = "",
+    [0x08] = "PSN",
+    [0x10] = "BRN",
+    [0x20] = "FRZ",
+    [0x40] = "PAR",
+    [0x80] = "SLP"
 }
 
 -- Initialize display module
@@ -121,9 +131,8 @@ local function drawTypes(x, y, types)
     end
 end
 
--- Draw move list
+-- Draw move list with actual move names
 local function drawMoves(x, y, pokemon)
-    local move_data = require("data.move_data")
     local current_y = y
     
     gui.pixelText(x, current_y, "Moves:", "White", 0x00000000)
@@ -131,17 +140,19 @@ local function drawMoves(x, y, pokemon)
     
     for i, move_id in ipairs(pokemon.moves) do
         if move_id > 0 then
-            local move = move_data.getMoveData(move_id)
-            if move then
-                local move_text = string.format("%s (P:%d)", move.name, move.power or 0)
-                local move_color = type_colors[move.type_name] or 0x808080FF
-                
-                -- Draw move with type color background
-                gui.drawRectangle(x, current_y, 80, 10, move_color, move_color)
-                gui.pixelText(x + 2, current_y + 1, move_text, "White", 0x00000000)
-                
-                current_y = current_y + 11
-            end
+            local move_name = pokemon.move_names[i] or "Move " .. move_id
+            local pp_text = string.format("%d/%d", pokemon.pp[i] or 0, pokemon.pp[i] or 0)
+            
+            -- Get move type color (would need move data for this)
+            local move_color = 0x808080FF
+            
+            -- Draw move name
+            gui.pixelText(x, current_y, move_name, "White", 0x00000000)
+            
+            -- Draw PP
+            gui.pixelText(x + 80, current_y, pp_text, "Cyan", 0x00000000)
+            
+            current_y = current_y + 11
         end
     end
 end
@@ -154,10 +165,16 @@ local function drawPokemonPanel(x, y, pokemon, tier_result, slot)
     -- Panel background
     gui.drawRectangle(x, y, panel_width, panel_height, 0x333333FF, 0x222222DD)
     
-    -- Header with species name and tier
-    local species_name = pokemon_base_stats.getSpeciesName(pokemon.species) or ("Species " .. pokemon.species)
-    local header_text = string.format("Slot %d: %s Lv.%d", slot + 1, species_name, pokemon.level)
+    -- Header with Pokemon name and tier
+    local header_text = string.format("%d. %s Lv.%d", 
+        slot + 1, pokemon.nickname or pokemon.species_name, pokemon.level)
     gui.pixelText(x + 5, y + 5, header_text, "White", 0x00000000)
+    
+    -- Status condition
+    local status_text = status_names[pokemon.status] or ""
+    if status_text ~= "" then
+        gui.pixelText(x + 150, y + 5, status_text, "Red", 0x00000000)
+    end
     
     -- Tier badge
     local tier_x = x + panel_width - 50
@@ -176,6 +193,10 @@ local function drawPokemonPanel(x, y, pokemon, tier_result, slot)
         drawTypes(x + 5, current_y, pokemon.types)
         current_y = current_y + 15
     end
+    
+    -- Happiness indicator
+    local happiness_text = string.format("♥%d", pokemon.happiness)
+    gui.pixelText(x + 100, current_y - 15, happiness_text, "Pink", 0x00000000)
     
     -- Stats
     if config.display.show_stats then
@@ -197,6 +218,14 @@ local function drawPokemonPanel(x, y, pokemon, tier_result, slot)
             tier_result.breakdown.movepool,
             tier_result.breakdown.adaptability)
         gui.pixelText(x + 5, breakdown_y, breakdown_text, "Gray", 0x00000000)
+    end
+    
+    -- DVs display (optional)
+    if config.display.show_dvs then
+        local dv_text = string.format("DVs: %X%X%X%X%X", 
+            pokemon.dvs.hp, pokemon.dvs.attack, pokemon.dvs.defense, 
+            pokemon.dvs.speed, pokemon.dvs.special)
+        gui.pixelText(x + 140, current_y - 15, dv_text, "Gray", 0x00000000)
     end
 end
 
@@ -277,8 +306,8 @@ function display.drawMinimalOverlay(pokemon_data, tier_results)
         local tier_result = tier_results[slot]
         
         if pokemon and tier_result then
-            local species_name = pokemon_base_stats.getSpeciesName(pokemon.species) or ("?" .. pokemon.species)
-            local text = string.format("%d. %s - %s", slot + 1, species_name, tier_result.tier)
+            local text = string.format("%d. %s - %s", 
+                slot + 1, pokemon.nickname or pokemon.species_name, tier_result.tier)
             local color = tier_colors[tier_result.tier] or 0x808080FF
             
             gui.pixelText(x + 5, current_y, text, color, 0x00000000)
@@ -287,11 +316,92 @@ function display.drawMinimalOverlay(pokemon_data, tier_results)
     end
 end
 
+-- Draw starter selection overlay
+function display.drawStarterOverlay(starter_data, ratings)
+    if not starter_data or #starter_data == 0 then
+        return
+    end
+    
+    local x = 10
+    local y = 140
+    local width = 220
+    local height = 100
+    
+    -- Main background
+    gui.drawRectangle(x, y, width, height, 0xFFFFFFFF, 0x000000DD)
+    
+    -- Title
+    gui.text(x + 5, y + 5, "STARTER SELECTION", "Yellow", "Clear", 11)
+    
+    -- Draw each starter
+    local start_x = x + 5
+    for i = 1, 3 do
+        if starter_data[i] and ratings[i] then
+            local box_x = start_x + (i-1) * 70
+            
+            -- Box background
+            gui.drawRectangle(box_x, y + 20, 65, 75, 0x666666FF, 0x333333EE)
+            
+            -- Position
+            gui.text(box_x + 5, y + 23, starter_data[i].position_name, "White", "Clear", 9)
+            
+            -- Pokemon name
+            local name = starter_data[i].name
+            if string.len(name) > 8 then
+                name = string.sub(name, 1, 7) .. "."
+            end
+            gui.text(box_x + 5, y + 35, name, "White", "Clear", 9)
+            
+            -- Tier
+            local tier_color = "White"
+            if ratings[i].tier == "S" then tier_color = "Red"
+            elseif ratings[i].tier == "A" then tier_color = "Orange"
+            elseif ratings[i].tier == "B" then tier_color = "Yellow"
+            elseif ratings[i].tier == "C" then tier_color = "Green"
+            elseif ratings[i].tier == "D" then tier_color = "Blue"
+            else tier_color = "Gray" end
+            
+            gui.text(box_x + 5, y + 47, "Tier " .. ratings[i].tier, tier_color, "Clear", 10)
+            gui.text(box_x + 5, y + 60, "(" .. ratings[i].score .. ")", "Gray", "Clear", 8)
+            
+            -- Mini stats
+            local stats = starter_data[i].stats
+            gui.text(box_x + 5, y + 72, "Spd:" .. stats.speed, "Cyan", "Clear", 8)
+            gui.text(box_x + 5, y + 82, "BST:" .. stats.total, "White", "Clear", 8)
+        end
+    end
+    
+    -- Best choice indicator
+    local best_score = 0
+    local best_index = 1
+    for i, rating in ipairs(ratings) do
+        if rating.score > best_score then
+            best_score = rating.score
+            best_index = i
+        end
+    end
+    
+    -- Highlight best choice
+    local best_x = start_x + (best_index-1) * 70
+    gui.drawRectangle(best_x - 2, y + 18, 69, 79, 0xFFFF00FF, 0x00000000)
+    
+    -- Recommendation
+    gui.text(x + 5, y + 102, "Best: " .. starter_data[best_index].position_name, "Yellow", "Clear", 9)
+end
+
 -- Toggle between full and minimal display
 function display.toggleDisplayMode()
     config.display.show_stats = not config.display.show_stats
     config.display.show_moves = not config.display.show_moves
     console.log("Display mode: " .. (config.display.show_stats and "Full" or "Minimal"))
+end
+
+-- Update display position
+function display.setPosition(x, y)
+    display_config.x = x
+    display_config.y = y
+    config.display.position.x = x
+    config.display.position.y = y
 end
 
 return display

@@ -1,0 +1,10 @@
+Pokemon Crystal Memory Structure Analysis
+=========================================
+
+Best match (score: 175):
+  party_count = 0xD0F0
+  party_species = 0xD0F1
+  party_data_start = 0xD110
+
+Party count: 1
+Species: 1

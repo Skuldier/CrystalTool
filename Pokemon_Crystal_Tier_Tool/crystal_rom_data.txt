@@ -1,0 +1,283 @@
+-- Pokemon Crystal ROM Data Addresses
+-- For reading static data like move names, Pokemon names, type data, etc.
+
+local crystal_rom_data = {
+    -- Move Data
+    moves = {
+        -- Move names are stored as 13-byte strings
+        names_start = 0x1C9F29,            -- Start of move names in ROM
+        name_length = 13,                  -- Each move name is 13 bytes
+        
+        -- Move data table (each entry is 7 bytes)
+        data_start = 0x41AFE,              -- Start of move data table
+        data_length = 7,                   -- Each move entry is 7 bytes
+        
+        -- Move data structure offsets
+        data_offsets = {
+            animation = 0x00,              -- Animation ID
+            effect = 0x01,                 -- Effect ID
+            power = 0x02,                  -- Base power
+            type = 0x03,                   -- Move type
+            accuracy = 0x04,               -- Accuracy (out of 255)
+            pp = 0x05,                     -- Base PP
+            effect_chance = 0x06           -- Effect chance %
+        },
+        
+        -- Total number of moves in Crystal
+        total_moves = 251
+    },
+    
+    -- Pokemon Base Stats
+    pokemon = {
+        -- Pokemon names (10 bytes each)
+        names_start = 0x1B0B74,            -- Start of Pokemon names
+        name_length = 10,                  -- Each name is 10 bytes
+        
+        -- Base stats table (32 bytes per Pokemon)
+        base_stats_start = 0x51424,        -- Start of base stats
+        base_stats_length = 32,            -- Each entry is 32 bytes
+        
+        -- Base stats structure offsets
+        base_stats_offsets = {
+            base_hp = 0x00,                -- Base HP
+            base_attack = 0x01,            -- Base Attack
+            base_defense = 0x02,           -- Base Defense
+            base_speed = 0x03,             -- Base Speed
+            base_sp_attack = 0x04,         -- Base Special Attack
+            base_sp_defense = 0x05,        -- Base Special Defense
+            type1 = 0x06,                  -- Primary type
+            type2 = 0x07,                  -- Secondary type
+            catch_rate = 0x08,             -- Catch rate
+            base_exp = 0x09,               -- Base experience yield
+            item1 = 0x0A,                  -- Common held item
+            item2 = 0x0B,                  -- Rare held item
+            gender_ratio = 0x0C,           -- Gender ratio
+            unknown = 0x0D,                -- Unknown
+            hatch_cycles = 0x0E,           -- Egg hatch cycles
+            unknown2 = 0x0F,               -- Unknown
+            sprite_dimensions = 0x10,      -- Sprite size
+            padding = 0x11,                -- 4 bytes padding
+            growth_rate = 0x15,            -- Growth rate
+            egg_groups = 0x16,             -- Egg groups (1 byte)
+            
+            -- TM/HM compatibility (8 bytes)
+            tm_hm_compat = 0x17            -- 8 bytes of TM/HM flags
+        },
+        
+        -- Total Pokemon in Crystal
+        total_pokemon = 251
+    },
+    
+    -- Type Names
+    types = {
+        names_start = 0x50964,             -- Start of type names
+        name_length = 9,                   -- Each type name is 9 bytes
+        total_types = 17,                  -- 17 types in Gen 2
+        
+        -- Type IDs
+        type_ids = {
+            NORMAL = 0,
+            FIGHTING = 1,
+            FLYING = 2,
+            POISON = 3,
+            GROUND = 4,
+            ROCK = 5,
+            BUG = 6,
+            GHOST = 7,
+            STEEL = 8,
+            FIRE = 9,
+            WATER = 10,
+            GRASS = 11,
+            ELECTRIC = 12,
+            PSYCHIC = 13,
+            ICE = 14,
+            DRAGON = 15,
+            DARK = 16
+        }
+    },
+    
+    -- Type Effectiveness Chart
+    type_chart = {
+        -- Type effectiveness data starts here
+        effectiveness_start = 0x34BB1,     -- Start of type chart
+        
+        -- Each entry is 3 bytes:
+        -- Byte 1: Attacking type
+        -- Byte 2: Defending type  
+        -- Byte 3: Effectiveness (05 = not very effective, 14 = super effective, 00 = no effect)
+        entry_size = 3,
+        
+        -- Effectiveness values
+        effectiveness_values = {
+            NO_EFFECT = 0x00,
+            NOT_VERY_EFFECTIVE = 0x05,      -- 0.5x damage
+            NORMAL_DAMAGE = 0x0A,            -- 1x damage (default)
+            SUPER_EFFECTIVE = 0x14           -- 2x damage
+        }
+    },
+    
+    -- Evolution Data
+    evolutions = {
+        data_start = 0x427E1,              -- Start of evolution data
+        
+        -- Evolution methods
+        methods = {
+            NONE = 0x00,
+            LEVEL = 0x01,                  -- Level up
+            ITEM = 0x02,                   -- Use item
+            TRADE = 0x03,                  -- Trade
+            HAPPINESS = 0x04,              -- Happiness
+            STATS = 0x05                   -- Attack/Defense comparison
+        }
+    },
+    
+    -- Learnsets (Level-up moves)
+    learnsets = {
+        pointer_table = 0x425B1,           -- Pointer table to learnsets
+        
+        -- Each learnset entry is 2 bytes:
+        -- Byte 1: Level
+        -- Byte 2: Move ID
+        -- Terminated by 0x00
+    },
+    
+    -- Item Data
+    items = {
+        names_start = 0x1B4000,            -- Item names start
+        name_length = 13,                  -- Each item name is 13 bytes
+        
+        -- Item attributes
+        attributes_start = 0x67C50,        -- Item attributes table
+        attribute_length = 7,              -- Each entry is 7 bytes
+        
+        -- Item attribute offsets
+        attribute_offsets = {
+            price = 0x00,                  -- 2 bytes, item price
+            held_effect = 0x02,            -- Held effect
+            parameter = 0x03,              -- Effect parameter
+            property = 0x04,               -- Item property
+            pocket = 0x05,                 -- Pocket type
+            help = 0x06                    -- Help text pointer
+        }
+    },
+    
+    -- Trainer Data
+    trainers = {
+        -- Trainer class names
+        class_names_start = 0x50A3F,       -- Trainer class names
+        class_name_length = 13,            -- Each class name is 13 bytes
+        
+        -- Trainer data
+        data_start = 0x3993E,              -- Trainer party data
+        
+        -- Trainer structure varies based on party type:
+        -- Type 0: Level only
+        -- Type 1: Level + moves
+        -- Type 2: Level + held item
+        -- Type 3: Level + held item + moves
+    },
+    
+    -- Wild Pokemon Data
+    wild_pokemon = {
+        -- Johto wild Pokemon
+        johto_grass = 0x2A200,             -- Johto grass encounters
+        johto_water = 0x2A400,             -- Johto water encounters
+        
+        -- Kanto wild Pokemon  
+        kanto_grass = 0x2B600,             -- Kanto grass encounters
+        kanto_water = 0x2B800,             -- Kanto water encounters
+        
+        -- Special encounters
+        headbutt_trees = 0x2BB00,          -- Headbutt tree encounters
+        rock_smash = 0x2BC00,              -- Rock Smash encounters
+        
+        -- Encounter structure (per area):
+        -- Byte 1: Encounter rate
+        -- Followed by 10 slots of 2 bytes each (level, species)
+    },
+    
+    -- Text and Strings
+    text = {
+        -- Character encoding table
+        charmap_start = 0x80000,           -- Character map (varies by version)
+        
+        -- Common text pointers
+        pokemon_names = 0x1B0B74,
+        move_names = 0x1C9F29,
+        item_names = 0x1B4000,
+        type_names = 0x50964,
+        
+        -- Text commands
+        text_commands = {
+            END = 0x50,                    -- End of string
+            NEWLINE = 0x4F,                -- New line
+            PLAYER = 0x52,                 -- Player name
+            RIVAL = 0x53,                  -- Rival name
+            POKE = 0x54,                   -- "POKé"
+            CONT = 0x55,                   -- Continue arrow
+            DONE = 0x57                    -- End text box
+        }
+    },
+    
+    -- Palettes
+    palettes = {
+        -- Pokemon palettes
+        pokemon_palettes = 0xA8CE,         -- Pokemon color palettes
+        
+        -- Trainer palettes
+        trainer_palettes = 0xB4CE,         -- Trainer sprite palettes
+        
+        -- Each palette is 8 bytes (4 colors, 2 bytes each)
+        palette_size = 8
+    },
+    
+    -- Music and Sound
+    audio = {
+        -- Music headers
+        music_headers = 0xE906D,           -- Music header table
+        
+        -- Sound effects
+        sfx_headers = 0xE927C,             -- Sound effect headers
+        
+        -- Cry data
+        cry_headers = 0xF2D69,             -- Pokemon cry headers
+        cry_base_table = 0xF2D90,          -- Base cry data
+        cry_pitch_table = 0xF3078,         -- Cry pitch data
+        cry_length_table = 0xF3360         -- Cry length data
+    },
+    
+    -- Utility functions
+    utils = {
+        -- Read a string from ROM
+        read_string = function(addr, length)
+            -- This would be implemented in your Lua script
+            -- to read and decode Game Boy text encoding
+        end,
+        
+        -- Get move name address
+        get_move_name_addr = function(move_id)
+            return crystal_rom_data.moves.names_start + 
+                   ((move_id - 1) * crystal_rom_data.moves.name_length)
+        end,
+        
+        -- Get Pokemon name address
+        get_pokemon_name_addr = function(species_id)
+            return crystal_rom_data.pokemon.names_start + 
+                   ((species_id - 1) * crystal_rom_data.pokemon.name_length)
+        end,
+        
+        -- Get base stats address
+        get_base_stats_addr = function(species_id)
+            return crystal_rom_data.pokemon.base_stats_start + 
+                   ((species_id - 1) * crystal_rom_data.pokemon.base_stats_length)
+        end,
+        
+        -- Get move data address
+        get_move_data_addr = function(move_id)
+            return crystal_rom_data.moves.data_start + 
+                   ((move_id - 1) * crystal_rom_data.moves.data_length)
+        end
+    }
+}
+
+return crystal_rom_data
