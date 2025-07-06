@@ -3,6 +3,18 @@
 
 local starter_detector = {}
 
+-- Helper function to set memory domain
+local function setMemoryDomain(domain)
+    local domains = memory.getmemorydomainlist()
+    for _, d in ipairs(domains) do
+        if d == domain then
+            memory.usememorydomain(domain)
+            return true
+        end
+    end
+    return false
+end
+
 -- Memory addresses for starter selection
 local starter_addresses = {
     -- During Elm's lab selection
@@ -24,6 +36,13 @@ local starter_addresses = {
         slot3 = 0xCC5D,
     },
     
+    -- WRAM addresses (without bank offset)
+    wram_starter_data = {
+        slot1 = 0x18E8,
+        slot2 = 0x18E9,
+        slot3 = 0x18EA,
+    },
+    
     -- Event flags
     starter_chosen_flag = 0xD9F8,   -- Set when starter is chosen
     in_selection = 0xCE3E,          -- Active during selection
@@ -33,49 +52,67 @@ local starter_addresses = {
 local starter_cache = {
     active = false,
     starters = {},
-    last_check = 0
+    last_check = 0,
+    memory_domain = "System Bus"
 }
 
 -- Check if we're in the starter selection
 function starter_detector.isInStarterSelection()
-    -- Check if we're in Elm's lab
-    local current_map = memory.readbyte(starter_addresses.current_map)
-    if current_map ~= starter_addresses.elm_lab_map then
-        return false
+    -- Try both domains
+    local domains = {"WRAM", "System Bus"}
+    
+    for _, domain in ipairs(domains) do
+        if setMemoryDomain(domain) then
+            -- Adjust addresses based on domain
+            local map_addr = domain == "WRAM" and 0x0CB5 or starter_addresses.current_map
+            
+            -- Check if we're in Elm's lab
+            local current_map = memory.readbyte(map_addr)
+            if current_map == starter_addresses.elm_lab_map then
+                starter_cache.memory_domain = domain
+                
+                -- Check if starter hasn't been chosen yet
+                local flag_addr = domain == "WRAM" and 0x19F8 or starter_addresses.starter_chosen_flag
+                local chosen_flag = memory.readbyte(flag_addr)
+                
+                if chosen_flag == 0 then
+                    return true
+                end
+            end
+        end
     end
     
-    -- Check if starter hasn't been chosen yet
-    local chosen_flag = memory.readbyte(starter_addresses.starter_chosen_flag)
-    if chosen_flag ~= 0 then
-        return false
-    end
-    
-    -- Additional check for selection state
-    local selection_state = memory.readbyte(starter_addresses.in_selection)
-    
-    return true  -- In Elm's lab and haven't chosen starter
+    return false
 end
 
 -- Read starter Pokemon IDs
 function starter_detector.readStarters()
     local starters = {}
     
-    -- Try primary addresses
-    local s1 = memory.readbyte(starter_addresses.starter_data.slot1)
-    local s2 = memory.readbyte(starter_addresses.starter_data.slot2)
-    local s3 = memory.readbyte(starter_addresses.starter_data.slot3)
+    -- Use cached domain if available
+    setMemoryDomain(starter_cache.memory_domain)
     
-    -- Validate
-    if s1 > 0 and s1 <= 251 and s2 > 0 and s2 <= 251 and s3 > 0 and s3 <= 251 then
-        starters = {s1, s2, s3}
+    -- Try different address sets based on domain
+    local address_sets = {}
+    
+    if starter_cache.memory_domain == "WRAM" then
+        address_sets = {starter_addresses.wram_starter_data}
     else
-        -- Try alternative addresses
-        s1 = memory.readbyte(starter_addresses.alt_starter_data.slot1)
-        s2 = memory.readbyte(starter_addresses.alt_starter_data.slot2)
-        s3 = memory.readbyte(starter_addresses.alt_starter_data.slot3)
+        address_sets = {
+            starter_addresses.starter_data,
+            starter_addresses.alt_starter_data
+        }
+    end
+    
+    for _, addr_set in ipairs(address_sets) do
+        local s1 = memory.readbyte(addr_set.slot1)
+        local s2 = memory.readbyte(addr_set.slot2)
+        local s3 = memory.readbyte(addr_set.slot3)
         
+        -- Validate
         if s1 > 0 and s1 <= 251 and s2 > 0 and s2 <= 251 and s3 > 0 and s3 <= 251 then
             starters = {s1, s2, s3}
+            break
         end
     end
     

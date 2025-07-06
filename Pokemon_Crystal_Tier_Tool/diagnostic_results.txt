@@ -1,0 +1,61 @@
+Pokemon Crystal Diagnostic Results
+=================================
+
+Generated: 2025-07-06 00:38:38
+
+SUCCESS! Found working addresses:
+
+Domain: System Bus
+Add these to memory_reader.lua:
+```lua
+-- Use domain: System Bus
+party_count = 0xDCD7,
+party_species = 0xDCD8,
+party_data_start = 0xDCDF,
+```
+
+Confidence: 40%
+
+Tested address sets:
+
+WRAM Standard (0x0CD7 in WRAM):
+  Status: Invalid
+  Reason: Domain not available: WRAM
+
+WRAM Shifted +32 (0x0CF7 in WRAM):
+  Status: Invalid
+  Reason: Domain not available: WRAM
+
+WRAM Shifted -1 (0x0CD6 in WRAM):
+  Status: Invalid
+  Reason: Domain not available: WRAM
+
+WRAM Shifted +16 (0x0CE7 in WRAM):
+  Status: Invalid
+  Reason: Domain not available: WRAM
+
+WRAM Alt Region (0x01D7 in WRAM):
+  Status: Invalid
+  Reason: Domain not available: WRAM
+
+System Bus Original (0xDCD7 in System Bus):
+  Status: Valid
+  Pokemon count: 5
+  Confidence: 40%
+
+System Bus Shifted +32 (0xDCF7 in System Bus):
+  Status: Invalid
+  Reason: Invalid count: 0
+
+System Bus Shifted -1 (0xDCD6 in System Bus):
+  Status: Valid
+  Pokemon count: 5
+  Confidence: 40%
+
+System Bus Shifted +16 (0xDCE7 in System Bus):
+  Status: Invalid
+  Reason: Invalid count: 0
+
+System Bus Alt Region (0xD1D7 in System Bus):
+  Status: Invalid
+  Reason: Invalid count: 9

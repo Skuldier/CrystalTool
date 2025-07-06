@@ -6,15 +6,30 @@
 
 local starter_addon = {}
 
+-- Helper function to safely use memory domain
+local function useMemoryDomain(domain)
+    if memory.usememorydomain then
+        memory.usememorydomain(domain)
+        return true
+    end
+    return false
+end
+
 -- Configuration
 local STARTER_CONFIG = {
     -- Memory addresses for starters (update if needed)
     addresses = {
         elm_lab_map = 0x08,
+        -- System Bus addresses
         current_map = 0xDCB5,
         starter1 = 0xD8E8,  -- Left starter
         starter2 = 0xD8E9,  -- Middle starter
         starter3 = 0xD8EA,  -- Right starter
+        -- WRAM addresses (without bank offset)
+        wram_current_map = 0x0CB5,
+        wram_starter1 = 0x18E8,
+        wram_starter2 = 0x18E9,
+        wram_starter3 = 0x18EA,
     },
     
     -- Display settings
@@ -22,27 +37,49 @@ local STARTER_CONFIG = {
         x = 10,
         y = 140,
         enabled = true
-    }
+    },
+    
+    -- Memory domain preference
+    memory_domain = "WRAM"  -- or "System Bus"
 }
 
 -- Cache
 local cache = {
     active = false,
     starters = {},
-    last_check = 0
+    last_check = 0,
+    domain_checked = false
 }
 
 -- Check if in starter selection
 local function isInStarterSelection()
-    local current_map = memory.readbyte(STARTER_CONFIG.addresses.current_map)
+    -- Determine which addresses to use based on domain
+    local map_addr = STARTER_CONFIG.memory_domain == "WRAM" 
+        and STARTER_CONFIG.addresses.wram_current_map 
+        or STARTER_CONFIG.addresses.current_map
+    
+    local current_map = memory.readbyte(map_addr)
     return current_map == STARTER_CONFIG.addresses.elm_lab_map
 end
 
 -- Read starter IDs
 local function readStarters()
-    local s1 = memory.readbyte(STARTER_CONFIG.addresses.starter1)
-    local s2 = memory.readbyte(STARTER_CONFIG.addresses.starter2)
-    local s3 = memory.readbyte(STARTER_CONFIG.addresses.starter3)
+    -- Use appropriate addresses based on domain
+    local addr1, addr2, addr3
+    
+    if STARTER_CONFIG.memory_domain == "WRAM" then
+        addr1 = STARTER_CONFIG.addresses.wram_starter1
+        addr2 = STARTER_CONFIG.addresses.wram_starter2
+        addr3 = STARTER_CONFIG.addresses.wram_starter3
+    else
+        addr1 = STARTER_CONFIG.addresses.starter1
+        addr2 = STARTER_CONFIG.addresses.starter2
+        addr3 = STARTER_CONFIG.addresses.starter3
+    end
+    
+    local s1 = memory.readbyte(addr1)
+    local s2 = memory.readbyte(addr2)
+    local s3 = memory.readbyte(addr3)
     
     -- Validate
     if s1 > 0 and s1 <= 251 and s2 > 0 and s2 <= 251 and s3 > 0 and s3 <= 251 then
@@ -160,6 +197,21 @@ end
 -- Update function to be called each frame
 function starter_addon.update()
     local frame = emu.framecount()
+    
+    -- Auto-detect best memory domain on first run
+    if not cache.domain_checked then
+        -- Try WRAM first
+        if useMemoryDomain("WRAM") then
+            STARTER_CONFIG.memory_domain = "WRAM"
+            console.log("Starter addon using WRAM domain")
+        elseif useMemoryDomain("System Bus") then
+            STARTER_CONFIG.memory_domain = "System Bus"
+            console.log("Starter addon using System Bus domain")
+        else
+            console.log("Starter addon: No suitable memory domain found!")
+        end
+        cache.domain_checked = true
+    end
     
     -- Only check every 30 frames
     if frame - cache.last_check < 30 then
