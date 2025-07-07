@@ -1,0 +1,456 @@
+#!/usr/bin/env python3
+"""
+Pokemon Crystal Learnset Finder - Enhanced Version
+Searches for Pokemon move learnset data in Crystal ROMs
+"""
+
+import tkinter as tk
+from tkinter import ttk, scrolledtext, filedialog, messagebox
+import struct
+from pathlib import Path
+from typing import List, Tuple, Dict, Optional
+
+
+class EnhancedLearnsetFinder:
+    """Enhanced tool to find Pokemon learnset data"""
+    
+    # Pokemon base stats location (from our findings)
+    POKEMON_BASE = 0x513F4  # Patched ROM
+    POKEMON_SIZE = 32
+    
+    # Known patterns from Crystal disassembly
+    # Evolution and learnset data is typically stored together
+    KNOWN_PATTERNS = {
+        "EVOLVE_NONE": 0x00,
+        "EVOLVE_LEVEL": 0x01,
+        "EVOLVE_ITEM": 0x02,
+        "EVOLVE_TRADE": 0x03,
+        "EVOLVE_HAPPINESS": 0x04,
+        "EVOLVE_STAT": 0x05,
+    }
+    
+    # Test Pokemon with well-known learnsets
+    TEST_POKEMON = {
+        1: {  # Bulbasaur
+            "name": "Bulbasaur",
+            "expected_moves": {
+                1: ["Tackle", "Growl"],
+                7: ["Leech Seed"],
+                13: ["Vine Whip"],
+                20: ["Poison Powder"],
+                27: ["Razor Leaf"],
+                34: ["Growth"],
+                41: ["Sleep Powder"],
+                48: ["Solar Beam"]
+            }
+        },
+        25: {  # Pikachu
+            "name": "Pikachu",
+            "expected_moves": {
+                1: ["Thunder Shock", "Growl"],
+                6: ["Tail Whip"],
+                8: ["Thunder Wave"],
+                11: ["Quick Attack"],
+                15: ["Double Team"],
+                20: ["Slam"],
+                26: ["Thunderbolt"],
+                33: ["Agility"],
+                41: ["Thunder"],
+                50: ["Light Screen"]
+            }
+        },
+        150: {  # Mewtwo
+            "name": "Mewtwo",
+            "expected_moves": {
+                1: ["Confusion", "Disable"],
+                11: ["Barrier"],
+                22: ["Swift"],
+                33: ["Psych Up"],
+                44: ["Future Sight"],
+                55: ["Mist"],
+                66: ["Psychic"],
+                77: ["Amnesia"],
+                88: ["Recover"],
+                99: ["Safeguard"]
+            }
+        }
+    }
+    
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Pokemon Crystal Learnset Finder - Enhanced")
+        self.root.geometry("1200x800")
+        
+        self.rom_path = None
+        self.rom_data = None
+        self.found_locations = {}
+        
+        self.create_widgets()
+        
+    def create_widgets(self):
+        """Create GUI"""
+        main_frame = ttk.Frame(self.root, padding="10")
+        main_frame.pack(fill=tk.BOTH, expand=True)
+        
+        # Header
+        header_frame = ttk.Frame(main_frame)
+        header_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        ttk.Label(header_frame, text="Enhanced Learnset Finder", 
+                 font=("Arial", 14, "bold")).pack(side=tk.LEFT)
+        
+        # File controls
+        file_frame = ttk.LabelFrame(main_frame, text="ROM File", padding="10")
+        file_frame.pack(fill=tk.X, pady=(0, 10))
+        
+        ttk.Button(file_frame, text="Load ROM", command=self.load_rom).pack(side=tk.LEFT, padx=5)
+        self.rom_label = ttk.Label(file_frame, text="No ROM loaded")
+        self.rom_label.pack(side=tk.LEFT, padx=10)
+        
+        # Search controls
+        control_frame = ttk.Frame(main_frame)
+        control_frame.pack(fill=tk.X, pady=10)
+        
+        ttk.Button(control_frame, text="🔍 Smart Search", 
+                  command=self.smart_search, style="Accent.TButton").pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="📍 Find by Evolution", 
+                  command=self.find_by_evolution).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="🎯 Scan ROM Regions", 
+                  command=self.scan_regions).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="✅ Verify Findings", 
+                  command=self.verify_findings).pack(side=tk.LEFT, padx=5)
+        ttk.Button(control_frame, text="💾 Export", 
+                  command=self.export_findings).pack(side=tk.LEFT, padx=5)
+        
+        # Results area
+        self.results_text = scrolledtext.ScrolledText(main_frame, wrap=tk.WORD, 
+                                                     font=("Consolas", 10))
+        self.results_text.pack(fill=tk.BOTH, expand=True)
+        
+    def load_rom(self):
+        """Load ROM file"""
+        filename = filedialog.askopenfilename(
+            title="Select Pokemon Crystal ROM",
+            filetypes=[("Game Boy ROMs", "*.gbc *.gb"), ("All files", "*.*")]
+        )
+        
+        if filename:
+            self.rom_path = Path(filename)
+            self.rom_data = self.rom_path.read_bytes()
+            self.rom_label.config(text=self.rom_path.name)
+            self.log(f"Loaded ROM: {self.rom_path.name} ({len(self.rom_data):,} bytes)")
+            
+    def smart_search(self):
+        """Smart search using multiple strategies"""
+        if not self.rom_data:
+            messagebox.showerror("Error", "Please load a ROM first")
+            return
+            
+        self.log("\n🔍 SMART LEARNSET SEARCH")
+        self.log("="*70)
+        
+        # Strategy 1: Search after Pokemon base stats
+        self.log("\n1. Searching after Pokemon base stats...")
+        search_start = self.POKEMON_BASE + (251 * self.POKEMON_SIZE)
+        self.log(f"   Starting search at: 0x{search_start:06X}")
+        
+        # Look for Bulbasaur's pattern
+        # Level 1 = Tackle (33), Level 1 = Growl (45), Level 7 = Leech Seed (73)
+        patterns = [
+            b'\x01\x21\x01\x2D\x07\x49',  # Level/move pairs
+            b'\x01\x21\x04\x2D\x07\x49',  # With gap
+            b'\x00\x21\x00\x2D\x07\x49',  # 0-based levels
+        ]
+        
+        for pattern in patterns:
+            self.search_pattern(pattern, search_start, search_start + 0x10000)
+            
+        # Strategy 2: Search for pointer table pattern
+        self.log("\n2. Searching for pointer tables...")
+        self.find_pointer_tables(0x40000, 0x50000)
+        
+        # Strategy 3: Search by known move sequences
+        self.log("\n3. Searching for known move sequences...")
+        self.search_move_sequences()
+        
+    def search_pattern(self, pattern: bytes, start: int, end: int) -> List[int]:
+        """Search for pattern in ROM region"""
+        found = []
+        offset = start
+        
+        while offset < min(end, len(self.rom_data) - len(pattern)):
+            pos = self.rom_data.find(pattern, offset)
+            if pos == -1:
+                break
+                
+            found.append(pos)
+            self.log(f"   Found pattern at: 0x{pos:06X}")
+            
+            # Show context
+            context_start = max(0, pos - 16)
+            context_end = min(len(self.rom_data), pos + 32)
+            hex_dump = ' '.join(f'{b:02X}' for b in self.rom_data[context_start:context_end])
+            self.log(f"   Context: {hex_dump}")
+            
+            offset = pos + 1
+            
+        return found
+        
+    def find_by_evolution(self):
+        """Find learnsets by looking for evolution data first"""
+        if not self.rom_data:
+            messagebox.showerror("Error", "Please load a ROM first")
+            return
+            
+        self.log("\n📍 FINDING LEARNSETS VIA EVOLUTION DATA")
+        self.log("="*70)
+        
+        # Evolution data often precedes learnset data
+        # Look for evolution terminators (0x00) followed by move data
+        
+        # Bulbasaur evolves at level 16 to Ivysaur
+        # Pattern: EVOLVE_LEVEL (0x01), Level (16), Species (2), Terminator (0x00)
+        evo_pattern = b'\x01\x10\x02\x00'
+        
+        self.log("Searching for Bulbasaur evolution pattern...")
+        offset = 0
+        
+        while offset < len(self.rom_data) - 100:
+            pos = self.rom_data.find(evo_pattern, offset)
+            if pos == -1:
+                break
+                
+            self.log(f"\nFound evolution at: 0x{pos:06X}")
+            
+            # Check what follows the evolution data
+            learnset_start = pos + len(evo_pattern)
+            self.analyze_potential_learnset(learnset_start)
+            
+            offset = pos + 1
+            
+    def analyze_potential_learnset(self, offset: int):
+        """Analyze data at offset as potential learnset"""
+        self.log(f"Analyzing potential learnset at 0x{offset:06X}:")
+        
+        moves = []
+        pos = offset
+        
+        # Read up to 30 level/move pairs
+        for i in range(30):
+            if pos + 2 > len(self.rom_data):
+                break
+                
+            level = self.rom_data[pos]
+            move = self.rom_data[pos + 1]
+            
+            # Check for terminator
+            if level == 0 or level == 0xFF:
+                self.log(f"  Terminator found after {i} moves")
+                break
+                
+            # Validate
+            if level <= 100 and 0 < move <= 251:
+                moves.append((level, move))
+                self.log(f"  Level {level:3d}: Move #{move:3d}")
+            else:
+                self.log(f"  Invalid data at offset {i}: level={level}, move={move}")
+                break
+                
+        if len(moves) >= 3:  # At least 3 valid moves
+            self.log(f"  ✓ Valid learnset with {len(moves)} moves!")
+            self.found_locations[offset] = moves
+            
+    def find_pointer_tables(self, start: int, end: int):
+        """Find pointer tables that might point to learnsets"""
+        self.log(f"\nSearching for pointer tables in range 0x{start:06X}-0x{end:06X}...")
+        
+        # Look for tables of 251 pointers
+        for offset in range(start, min(end, len(self.rom_data) - 502)):
+            # Read potential pointers
+            pointers = []
+            valid = True
+            
+            for i in range(10):  # Check first 10
+                if offset + i*2 + 2 > len(self.rom_data):
+                    break
+                    
+                ptr = struct.unpack('<H', self.rom_data[offset + i*2:offset + i*2 + 2])[0]
+                
+                # Convert to absolute address (assuming bank)
+                bank = offset >> 16
+                abs_ptr = (bank << 16) | (ptr & 0x3FFF) | 0x4000
+                
+                if abs_ptr < offset or abs_ptr > len(self.rom_data):
+                    valid = False
+                    break
+                    
+                pointers.append(abs_ptr)
+                
+            if valid and len(pointers) == 10:
+                # Check if pointers are sequential (typical for data tables)
+                diffs = [pointers[i+1] - pointers[i] for i in range(len(pointers)-1)]
+                
+                # Reasonable size differences for learnsets (5-50 bytes each)
+                if all(5 <= d <= 50 for d in diffs):
+                    self.log(f"  Potential pointer table at 0x{offset:06X}")
+                    self.log(f"    First pointers: {[hex(p) for p in pointers[:3]]}")
+                    
+                    # Check first pointer
+                    self.analyze_potential_learnset(pointers[0])
+                    
+    def search_move_sequences(self):
+        """Search for known move learning sequences"""
+        sequences = {
+            "Starter moves": [33, 45],  # Tackle, Growl
+            "Pikachu early": [84, 45, 39, 86],  # Thunder Shock, Growl, Tail Whip, Thunder Wave
+            "Psychic types": [93, 50],  # Confusion, Disable
+        }
+        
+        for name, moves in sequences.items():
+            self.log(f"\nSearching for {name}: {moves}")
+            
+            # Build search pattern
+            pattern = b''
+            for i, move in enumerate(moves[:2]):  # Use first 2 moves
+                if i == 0:
+                    pattern += bytes([1, move])  # Level 1
+                else:
+                    pattern += bytes([1, move]) # Also level 1
+                    
+            found = self.search_pattern(pattern, 0x40000, 0x80000)
+            
+    def scan_regions(self):
+        """Scan specific ROM regions for learnset data"""
+        if not self.rom_data:
+            messagebox.showerror("Error", "Please load a ROM first")
+            return
+            
+        self.log("\n🎯 SCANNING ROM REGIONS")
+        self.log("="*70)
+        
+        regions = [
+            (0x42000, 0x44000, "After move data"),
+            (0x425B1, 0x429B3, "Evolution/learnset area"),
+            (0x38000, 0x40000, "Bank E/F boundary"),
+            (0x50000, 0x54000, "Bank 14"),
+        ]
+        
+        for start, end, desc in regions:
+            self.log(f"\nScanning {desc} (0x{start:06X}-0x{end:06X})...")
+            
+            # Look for level/move pair patterns
+            for offset in range(start, min(end, len(self.rom_data) - 20)):
+                # Check if this could be a learnset
+                if self.looks_like_learnset(offset):
+                    self.log(f"  Potential learnset at 0x{offset:06X}")
+                    self.analyze_potential_learnset(offset)
+                    
+    def looks_like_learnset(self, offset: int) -> bool:
+        """Quick check if offset might contain learnset data"""
+        if offset + 10 > len(self.rom_data):
+            return False
+            
+        # Check first few bytes
+        for i in range(0, 10, 2):
+            level = self.rom_data[offset + i]
+            move = self.rom_data[offset + i + 1]
+            
+            # Terminator found early
+            if level == 0 or level == 0xFF:
+                return i >= 4  # At least 2 moves
+                
+            # Invalid data
+            if level > 100 or move == 0 or move > 251:
+                return False
+                
+            # Levels should generally increase
+            if i > 0:
+                prev_level = self.rom_data[offset + i - 2]
+                if level < prev_level:
+                    return False
+                    
+        return True
+        
+    def verify_findings(self):
+        """Verify found learnset locations"""
+        if not self.found_locations:
+            messagebox.showwarning("Warning", "No learnset locations found yet")
+            return
+            
+        self.log("\n✅ VERIFYING FINDINGS")
+        self.log("="*70)
+        
+        valid_count = 0
+        
+        for offset, moves in self.found_locations.items():
+            self.log(f"\nVerifying location 0x{offset:06X}:")
+            self.log(f"  Contains {len(moves)} moves")
+            
+            # Check if moves make sense
+            issues = []
+            
+            # Check level progression
+            for i in range(1, len(moves)):
+                if moves[i][0] < moves[i-1][0]:
+                    issues.append(f"Level decreases at position {i}")
+                    
+            # Check for duplicate moves
+            move_ids = [m[1] for m in moves]
+            if len(move_ids) != len(set(move_ids)):
+                issues.append("Contains duplicate moves")
+                
+            # Check for reasonable level ranges
+            max_level = max(m[0] for m in moves)
+            if max_level > 100:
+                issues.append(f"Max level {max_level} > 100")
+                
+            if not issues:
+                self.log("  ✓ VALID learnset!")
+                valid_count += 1
+            else:
+                self.log(f"  ✗ Issues: {', '.join(issues)}")
+                
+        self.log(f"\nTotal valid learnsets: {valid_count}/{len(self.found_locations)}")
+        
+    def export_findings(self):
+        """Export findings"""
+        if not self.found_locations:
+            messagebox.showwarning("Warning", "No findings to export")
+            return
+            
+        filename = filedialog.asksaveasfilename(
+            defaultextension=".txt",
+            filetypes=[("Text files", "*.txt"), ("All files", "*.*")]
+        )
+        
+        if filename:
+            with open(filename, 'w') as f:
+                f.write("Pokemon Crystal Learnset Findings\n")
+                f.write("="*50 + "\n\n")
+                
+                for offset, moves in sorted(self.found_locations.items()):
+                    f.write(f"Location: 0x{offset:06X}\n")
+                    f.write(f"Moves: {len(moves)}\n")
+                    
+                    for level, move in moves:
+                        f.write(f"  Level {level:3d}: Move #{move:3d}\n")
+                        
+                    f.write("\n")
+                    
+            self.log(f"\n✓ Exported to: {filename}")
+            
+    def log(self, message):
+        """Add message to results"""
+        self.results_text.insert(tk.END, message + "\n")
+        self.results_text.see(tk.END)
+        self.root.update()
+
+
+def main():
+    root = tk.Tk()
+    app = EnhancedLearnsetFinder(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
